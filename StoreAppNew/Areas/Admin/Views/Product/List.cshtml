@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Product>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row mx-3 my-3">
+            @foreach (Product product in Model)
+            {
+                @* <div>
+                        <h3>@product.ProductName</h3>
+                        <p>@product.Price</p>
+                        <p>
+                            <a href="/Product/Get/@product.ProductId">Get Details</a>
+                        </p>
+                    </div> *@
+
+            <div class="col-sm-12 col-md-3 my-3" col-xl-3 >
+                <div class="card" style="width: 18rem;">
+                    <img src="~/images/mouse.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a class="btn btn-primary" asp-action="Get" asp-route-id="@product.ProductId">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            Get Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Category>
+
+<div class="my-3">
+	<ul class="list-group">
+		@foreach (Category category in Model)
+		{
+			<li class="list-group-item">
+                <a asp-action="Index" asp-route-categoryId="@category.CategoryId" >
+                    @category.CategoryName
+                </a>
+			</li>
+			<br />
+		}
+	</ul>
+</div>
