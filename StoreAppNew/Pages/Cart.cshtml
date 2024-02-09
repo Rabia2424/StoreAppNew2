@@ -27,13 +27,15 @@
                     <td>@((line.Product.Price * line.Quantity))</td>
                     <td>
                         <form method="post" asp-page-handler="Remove">
-                            <input type="hidden" name="id" value="@line.Product.ProductId"/>
-                            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl"/>
-                            <button type="submit" class="btn btn-sm btn-danger" >
+                            <input type="hidden" name="id" value="@line.Product.ProductId" />
+                            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+                            <button type="submit" class="btn btn-sm btn-danger">
                                 <i class="fa fa-remove"></i>
                                 Remove
                             </button>
                         </form>
+                    
+
                     </td>
                 </tr>
             }

@@ -1,5 +1,4 @@
-﻿@model IQueryable<Product>
-
+﻿@model StoreAppNew2.Models.ProductListViewModel
 
 <div class="row"> 
     <div class="col-md-3">
@@ -9,7 +8,7 @@
     </div>
 	<div class="col-md-9">
 		<div class="row my-3">
-			@foreach (Product product in Model)
+			@foreach (Product product in Model.Products)
 			{
 				@* <div>
 		<h3>@product.ProductName</h3>
@@ -21,6 +20,15 @@
 
 		<partial name="_ProductCard" model="@product" />
 			}
+		</div>
+		<div>
+			<div page-model="@Model.Pagination" page-action="Index"
+				 page-classes-enabled="true" 
+				 page-class="btn" 
+				 page-class-normal="btn-outline-dark" 
+				 page-class-selected="btn-primary" 
+				 class="btn-group" >
+			</div>
 		</div>
 	</div>
 </div>
