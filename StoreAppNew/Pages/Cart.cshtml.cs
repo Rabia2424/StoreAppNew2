@@ -2,7 +2,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Contracts;
-using StoreAppNew2.Infrastructer.Extensions;
+using StoreAppNew2.Infrastructure.Extensions;
 
 namespace StoreAppNew2.Pages
 {

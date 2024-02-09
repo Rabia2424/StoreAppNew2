@@ -1,5 +1,5 @@
-﻿namespace StoreAppNew2.Infrastructer.Extensions
-{
+﻿namespace StoreAppNew2.Infrastructure.Extensions
+{ 
 	public static class HttpRequestExtension
 	{
 		public static string PathAndQuery(this HttpRequest request)

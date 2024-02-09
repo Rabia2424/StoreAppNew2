@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace StoreAppNew2.Infrastructer.TagHelpers
+namespace StoreAppNew2.Infrastructure.TagHelpers
 {
 	[HtmlTargetElement("table")]
 	public class TableTagHelper : TagHelper

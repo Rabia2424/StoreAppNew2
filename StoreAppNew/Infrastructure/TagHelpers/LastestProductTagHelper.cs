@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Services.Contracts;
 
-namespace StoreAppNew2.Infrastructer.TagHelpers
+namespace StoreAppNew2.Infrastructure.TagHelpers
 {
 	[HtmlTargetElement("div",Attributes="products")]
 	public class LastestProductTagHelper : TagHelper

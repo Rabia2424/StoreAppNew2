@@ -4,7 +4,7 @@ using Repositories;
 using Repositories.Contracts;
 using Services;
 using Services.Contracts;
-using StoreAppNew2.Infrastructer.Extensions;
+using StoreAppNew2.Infrastructure.Extensions;
 using StoreAppNew2.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +22,7 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 //builder.Services.AddDbContext<RepositoryContext>(options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("StoreAppNew2")));
 
 builder.Services.ConfigureDbContext(builder.Configuration);
+builder.Services.ConfigureIdentity();
 
 ////This two lines for Session part
 //builder.Services.AddDistributedMemoryCache();
@@ -91,4 +92,5 @@ app.UseEndpoints(endpoints =>
 });
 
 app.ConfigureAndCheckMigration();
+app.ConfigureDefaultAdminUser();
 app.Run();
