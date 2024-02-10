@@ -69,13 +69,13 @@ namespace StoreAppNew2.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				//var user = new IdentityUser();
-				//user = _mapper.Map<IdentityUser>(registerDto);
-				var user = new IdentityUser()
-				{
-					UserName = registerDto.UserName,
-					Email = registerDto.Email,
-				};
+				
+				var user = _mapper.Map<IdentityUser>(registerDto);
+				//var user = new IdentityUser()
+				//{
+				//	UserName = registerDto.UserName,
+				//	Email = registerDto.Email,
+				//};
 				var result = await _userManager.CreateAsync(user, registerDto.Password);
 
 				if(result.Succeeded)
