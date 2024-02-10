@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace StoreAppNew2.Infrastructure.Extensions
 {
-	public static class ServiceExtension
+    public static class ServiceExtension
 	{
 		public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
 		{
@@ -62,6 +62,7 @@ namespace StoreAppNew2.Infrastructure.Extensions
 			services.AddScoped<IProductService, ProductManager>();
 			services.AddScoped<ICategoryService, CategoryManager>();
 			services.AddScoped<IOrderService, OrderManager>();
+			services.AddScoped<IAuthService, AuthManager>();
 		}
 
 		public static void ConfigureRouting(this IServiceCollection services)
