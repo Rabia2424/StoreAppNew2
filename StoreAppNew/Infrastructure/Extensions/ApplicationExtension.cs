@@ -23,7 +23,7 @@ namespace StoreAppNew2.Infrastructure.Extensions
 		public static async void ConfigureDefaultAdminUser(this IApplicationBuilder app)
 		{
 			const string adminUser = "Admin";
-			const string adminPassword = "Admin123456";
+			const string adminPassword = "Admin+123456";
 
 			//UserManager
 			UserManager<IdentityUser> userManager = app
@@ -34,7 +34,7 @@ namespace StoreAppNew2.Infrastructure.Extensions
 			//RoleManager
 			RoleManager<IdentityRole> roleManager = app
 				.ApplicationServices
-				.CreateScope()
+				.CreateAsyncScope()
 				.ServiceProvider
 				.GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -47,15 +47,20 @@ namespace StoreAppNew2.Infrastructure.Extensions
 					PhoneNumber = "5061112233",
 					UserName = adminUser,
 				};
-			}
 
-			var result = await userManager.CreateAsync(user, adminPassword);
-			if (!result.Succeeded)
-			{
-				throw new Exception("Admin user could not created.");
-			}
+				var result = await userManager.CreateAsync(user, adminPassword);
+				if (!result.Succeeded)
+				{
+					throw new Exception("Admin user could not created.");
+				}
 
-			var roleResult = await userManager.AddToRolesAsync(user,
+
+				var roleResult = await userManager.AddToRolesAsync(user, 
+					roleManager
+					.Roles
+					.Select(r => r.Name)
+					.ToList()
+				);
 				//I can define like below here but every role added to application I have to add here too so that I'll use dynamic codes for that structure.
 				//new List<string>() 
 				//{ 
@@ -63,15 +68,9 @@ namespace StoreAppNew2.Infrastructure.Extensions
 				//	"Editor",
 				//	"User"
 				//}
-				roleManager
-				.Roles
-				.Select(r => r.Name)
-				.ToList()
-			);
-
-			if (!roleResult.Succeeded)
-				throw new Exception("System have problems with role defination for admin.");
-
+				if (!roleResult.Succeeded)
+					throw new Exception("System have problems with role defination for admin.");
+			}
 		}
 
 	}
