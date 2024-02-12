@@ -5,10 +5,10 @@ using Services.Contracts;
 
 namespace Services
 {
-    public class AuthManager : IAuthService
-    {
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
+	public class AuthManager : IAuthService
+	{
+		private readonly RoleManager<IdentityRole> _roleManager;
+		private readonly UserManager<IdentityUser> _userManager;
 		private readonly IMapper _mapper;
 
 		public AuthManager(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IMapper mapper)
@@ -19,11 +19,11 @@ namespace Services
 		}
 
 		public IEnumerable<IdentityRole> GetAllRoles =>
-            _roleManager.Roles;
+			_roleManager.Roles;
 
 		public void CreateRole(IdentityRole role)
 		{
-			_roleManager.CreateAsync(role).Wait();	
+			_roleManager.CreateAsync(role).Wait();
 		}
 
 		public async Task<IdentityResult> CreateUser(UserDtoForCreation userDto)
@@ -34,10 +34,10 @@ namespace Services
 			if (!result.Succeeded)
 				throw new Exception("User could not be created.");
 
-			if(userDto.Roles.Count > 0)
+			if (userDto.Roles.Count > 0)
 			{
 				var roleResult = await _userManager.AddToRolesAsync(user, userDto.Roles);
-				if(!roleResult.Succeeded)
+				if (!roleResult.Succeeded)
 					throw new Exception("System have problems with roles.");
 			}
 
@@ -53,6 +53,45 @@ namespace Services
 		{
 			List<IdentityUser> users = _userManager.Users.ToList();
 			return users;
+		}
+
+		public async Task<IdentityUser> GetOneUser(string userName)
+		{
+			IdentityUser user = await _userManager.FindByNameAsync(userName);
+			return user;
+		}
+
+		public async Task<UserDtoForUpdate> GetOneUserForUpdate(string userName)
+		{
+			var user = await GetOneUser(userName);
+			if(user is not null)
+			{
+				UserDtoForUpdate userDto = _mapper.Map<UserDtoForUpdate>(user);
+				userDto.Roles = new HashSet<string>(GetAllRoles.Select(r => r.Name).ToList());
+				userDto.UserRoles = new HashSet<string>(await _userManager.GetRolesAsync(user));
+				return userDto;
+			}
+			throw new Exception("An error occured.");
+		}
+
+		public async Task Update(UserDtoForUpdate userDto)
+		{
+			IdentityUser user = await _userManager.FindByNameAsync(userDto.UserName);
+			user.PhoneNumber = userDto.PhoneNumber;
+			user.Email = userDto.Email;
+
+			if (user is not null)
+			{
+				var result = await _userManager.UpdateAsync(user);
+				if (userDto.Roles.Count > 0)
+				{
+					var userRoles = await _userManager.GetRolesAsync(user);
+					var r1 = await _userManager.RemoveFromRolesAsync(user, userRoles);
+					var r2 = await _userManager.AddToRolesAsync(user, userDto.Roles);
+				}
+				return;
+			}
+			throw new Exception("System has problem with user update.");
 		}
 	}
 }
