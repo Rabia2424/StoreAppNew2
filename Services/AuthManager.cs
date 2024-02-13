@@ -44,6 +44,12 @@ namespace Services
 			return result;
 		}
 
+		public async Task<IdentityResult> DeleteOneUser(string userName)
+		{
+			var user = await GetOneUser(userName);
+			return await _userManager.DeleteAsync(user);
+		}
+
 		public void DeleteRole(IdentityRole role)
 		{
 			_roleManager.DeleteAsync(role).Wait();
@@ -58,20 +64,29 @@ namespace Services
 		public async Task<IdentityUser> GetOneUser(string userName)
 		{
 			IdentityUser user = await _userManager.FindByNameAsync(userName);
-			return user;
+			if (user is not null)
+				return user;
+			throw new Exception("User could not be found.");
 		}
 
 		public async Task<UserDtoForUpdate> GetOneUserForUpdate(string userName)
 		{
 			var user = await GetOneUser(userName);
-			if(user is not null)
-			{
-				UserDtoForUpdate userDto = _mapper.Map<UserDtoForUpdate>(user);
-				userDto.Roles = new HashSet<string>(GetAllRoles.Select(r => r.Name).ToList());
-				userDto.UserRoles = new HashSet<string>(await _userManager.GetRolesAsync(user));
-				return userDto;
-			}
-			throw new Exception("An error occured.");
+
+			UserDtoForUpdate userDto = _mapper.Map<UserDtoForUpdate>(user);
+			userDto.Roles = new HashSet<string>(GetAllRoles.Select(r => r.Name).ToList());
+			userDto.UserRoles = new HashSet<string>(await _userManager.GetRolesAsync(user));
+			return userDto;
+
+		}
+
+		public async Task<IdentityResult> ResetPassword(ResetPasswordDto model)
+		{
+			var user = await GetOneUser(model.UserName);
+
+			await _userManager.RemovePasswordAsync(user);
+			var result = await _userManager.AddPasswordAsync(user, model.Password);
+			return result;
 		}
 
 		public async Task Update(UserDtoForUpdate userDto)

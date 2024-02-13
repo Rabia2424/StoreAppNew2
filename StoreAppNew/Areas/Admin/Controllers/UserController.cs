@@ -1,4 +1,5 @@
 ﻿using Entities.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
@@ -6,6 +7,7 @@ using Services.Contracts;
 namespace StoreAppNew2.Areas.Admin.Controllers
 {
 	[Area("Admin")]
+	[Authorize(Roles = "Admin")]
 	public class UserController : Controller
 	{
 		private readonly IServiceManager _manager;
@@ -57,6 +59,39 @@ namespace StoreAppNew2.Areas.Admin.Controllers
 				return RedirectToAction("Index");
 			}
 			return View();	
+		}
+
+		public async Task<IActionResult> ResetPassword([FromRoute]string id)
+		{
+			return View(new ResetPasswordDto()
+			{
+				UserName = id
+			});
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]	
+		public async Task<IActionResult> ResetPassword(ResetPasswordDto reset)
+		{
+			if(ModelState.IsValid && reset.Password != null)
+			{
+				await _manager.AuthService.ResetPassword(reset);
+				return RedirectToAction("Index");
+			}
+			return View();
+		}
+
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]	
+		public async Task<IActionResult> Delete([FromForm] UserDto userDto)
+		{
+			var result = await _manager
+				.AuthService
+				.DeleteOneUser(userDto.UserName);
+			return result.Succeeded
+				? RedirectToAction("Index")
+				: View();
 		}
 	}
 }

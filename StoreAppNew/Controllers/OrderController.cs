@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
@@ -15,6 +16,7 @@ namespace StoreAppNew2.Controllers
 			_cart = cart;
 		}
 
+		[Authorize]
 		public ViewResult Checkout() => View(new Order());
 
 		[HttpPost]
