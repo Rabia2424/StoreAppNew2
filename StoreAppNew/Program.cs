@@ -49,6 +49,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.ConfigureRepositoryRegistration();
 builder.Services.ConfigureServiceRegistration();
 builder.Services.ConfigureRouting();
+builder.Services.ConfigureApplicationCookie();
 
 
 builder.Services.AddScoped<Cart>(c => SessionCart.GetCart(c));
