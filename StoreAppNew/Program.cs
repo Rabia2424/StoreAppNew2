@@ -9,6 +9,10 @@ using StoreAppNew2.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Add to support for API
+builder.Services.AddControllers()
+	.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 //This line added for razor pages
@@ -91,6 +95,9 @@ app.UseEndpoints(endpoints =>
 
 	//Endpoint For Razor Page 
 	endpoints.MapRazorPages();	
+
+	//Endpoint For API
+	endpoints.MapControllers();	
 });
 
 app.ConfigureAndCheckMigration();
