@@ -13,6 +13,12 @@ namespace Services
 			_manager = manager;
 		}
 
+		public void CreateCategory(Category category)
+		{
+			_manager.Category.Create(category);
+			_manager.Save();
+		}
+
 		public IEnumerable<Category> GetAllCategories(bool trackChanges)
 		{
 			return _manager.Category.FindAll(trackChanges);
